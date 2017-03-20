@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>TAC Sign-Up</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" title="basic style" type="text/css" href = "./homepage.css" media="all" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./signup.js"></script>
+</head>
+
+<body>
+	<div id="wrap">
+	  <nav class="navbar navbar-default navbar-fixed-top">
+	    <div class="container">
+	      <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="./homepage.html"><span><img src="brand.jpeg" alt="logo" height="25" width="25"/></span>   TAC</a>
+	      </div>
+	      <div id="navbar" class="navbar-collapse collapse">
+	      <ul class="nav navbar-nav">
+	        <li><a href="./groups.html">Groups</a></li>
+	        <li><a href="./events.html">Events</a></li>
+	        <li><a href="./contactUs.html">Contact Us</a></li>
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">
+	        <li class="active"><a href="./signup.html">Sign Up</a></li>
+	      </ul>
+	      </div>
+	    </div>
+	  </nav>
+	  <div class="container">
+		  <div class="row" style="margin-top: 5%;">
+		    <div class="col-lg-12">
+		    	<div class="well well-sm">
+						<form id="signup" method="post" action="" onsubmit="return validate();" style="width: 50%; margin: 0 auto;">
+							<legend class="text-center header"> Sign-Up for TAC </legend>
+						  <div id="name" class="form-group">
+						    <input type="text" class="form-control" placeholder="Enter full name">
+					    </div>
+					    <div id="email" class="form-group">
+						    <input type="email" class="form-control" placeholder="Enter email">
+						  </div>
+						  <div id="username" class="form-group">
+						  	<input type="text" class="form-control" placeholder="Enter username (must be 6-20 characters long)">
+					  	</div>
+					  	<div id="pwd" class="form-group">
+					  		<input type="password" class="form-control" placeholder="Enter password (must be 8-20 characters long)">
+					  	</div>
+					  	<div id="pwdTwo" class="form-group">
+					  		<input type="password" class="form-control" placeholder="Re-enter password">
+					  	</div>
+					  	<div align="center">
+					  		<button type="submit" class="btn btn-primary">Submit</button>
+					  	</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	  <div id="push"></div>
+  </div>
+
+  <div id="footer">
+    <div class="container">
+      <div class = "row">
+        <div class = "col-md-4 text-left">
+          <p><a href = "./contactUs.html">Contact Us</a></p>
+        </div>
+        
+        <div class = "col-md-4 text-left">
+          <figure>
+            <figcaption>Connect</figcaption>
+            <img src = "" alt = "Facebook" />
+            <img src = "" alt = "Twitter" />
+            <img src = "" alt = "Instagram" />
+          </figure>
+        </div>
+        
+        <div class = "col-md-4 text-left">
+          <p>&copy; 2016 Texas Acappella Community</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

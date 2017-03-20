@@ -1,0 +1,17 @@
+/*
+File name: contactUs.css
+Authors: Blake Kappel, Brian Bargas
+Date created: 09 Nov 2016
+Date modified: 09 Nov 2016
+*/
+
+  .header {
+    color: #36A0FF;
+    font-size: 27px;
+    padding: 10px;
+  }
+
+  .bigicon {
+    font-size: 35px;
+    color: #36A0FF;
+  }
