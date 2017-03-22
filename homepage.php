@@ -172,11 +172,11 @@ LOGGEDIN;
           <table class = "table table-responsive table-striped">
             <tr>
               <td><img src = "./img/ONS.png" class = "img-rounded" alt = "One Note Stand" height="75" width="75" /></td>
-              <td><h4>Latch - One Note Stand</h4></td>
+              <td><h4><a href = "https://youtu.be/qktLfcE37z0">Latch - One Note Stand</a></h4></td>
             </tr>
             <tr>
               <td><img src = "./img/colmus.png" class = "img-rounded" alt = "Collegium Musicum" height="75" width="75" /></td>
-              <td><h4>Home - Collegium Musicum</h4></td>
+              <td><h4><a href = "http://www.txcolmus.org/audio/14Home.wav">Home - Collegium Musicum (audio file download)</a></h4></td>
             </tr>
             <tr>
               <td><img src = "./img/BATB.png" class = "img-rounded" alt = "Beauties and the Beat" height="75" width="75"/></td>
@@ -184,7 +184,7 @@ LOGGEDIN;
             </tr>
             <tr>
               <td><img src = "./img/txsongs.png" class = "img-rounded" alt = "Texas Songhorns" height="75" width="75"/></td>
-              <td><h4>Its Not Unusual - Texas Songhorns</h4></td>
+              <td><h4><a href = "https://youtu.be/iFfr7RKyg44">Its Not Unusual - Texas Songhorns</a></h4></td>
             </tr>
           
           </table>
