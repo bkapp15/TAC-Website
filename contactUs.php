@@ -17,15 +17,6 @@ Date modified: 21 Nov 2016
         <link rel="stylesheet" type = "text/css" href="./contactUs.css" />
         <link rel="stylesheet" title="basic style" type="text/css" href = "./homepage.css" media="all" />
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <!--<script>
-          function validate(){
-            if ((document.getElementById("fname").value == "") || (document.getElementById("lname").value == "") || (document.getElementById("email").value == "") || (document.getElementById("message").value == "")){
-              window.alert("Please fill out all fields before submitting.");
-              return false;
-            }
-            return true;
-          }
-        </script>-->
         <script type="text/javascript" src="./contactHandler.js"></script>
 </head>
 
@@ -69,50 +60,49 @@ LOGGEDIN;
     </nav>
 
 <?php
-        function contactForm(){
-                $script = $_SERVER['PHP_SELF'];
-                print<<<CONTACT
-                <div class="container" id = "display">
-                        <div class="row" style="margin-top: 5%">
-                                <div class="col-md-12">
-                                        <div class="well well-sm">
-                                                <form class="form-horizontal" method="post" action="$script" onsubmit="return thankYou();" style = "margin: 40px auto; width: 50%;">
-                                                        <fieldset>
-                                                                <legend class="text-center header">Contact us</legend>
-
-                                                                <div class="form-group">
-                                                                        <input name="fname" id="fname" type="text" placeholder="First Name" class="form-control" />
-                                                                </div>
-                                                                <div class="form-group">
-                                                                        <input name="lname" id="lname" type="text" placeholder="Last Name" class="form-control" />
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                        <input name="email" id="email" type="text" placeholder="Email Address" class="form-control" />
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                        <textarea class="form-control" name="message" id="message" placeholder="Enter your massage for us here. We will get back to you within 2 business days." rows="7"></textarea>
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                        <div class="col-md-12 text-center">
-                                                                                <input type="submit" class="btn btn-primary btn-lg" name="contact" value = "Submit">
-                                                                        </div>
-                                                                </div>
-                                                        </fieldset>
-                                                </form>
-                                        </div>
-                                </div>
-                        </div>
+	
+	require_once("sendEmail.php");
+	
+  function contactForm(){
+    $script = $_SERVER['PHP_SELF'];
+    print<<<CONTACT
+    <div class="container" id = "display">
+      <div class="row" style="margin-top: 5%">
+        <div class="col-md-12">
+          <div class="well well-sm">
+						<form class="form-horizontal" method="post" action="$script" onsubmit="return thankYou();" style = "margin: 40px auto; width: 50%;">
+              <fieldset>
+                <legend class="text-center header">Contact us</legend>
+                <div class="form-group">
+                  <input name="fname" id="fname" type="text" placeholder="First Name" class="form-control" />
                 </div>
-          <div id="push>"</div>
-  </div>
+                <div class="form-group">
+                  <input name="lname" id="lname" type="text" placeholder="Last Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <input name="email" id="email" type="text" placeholder="Email Address" class="form-control" />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" id="message" placeholder="Enter your massage for us here. We will get back to you within 2 business days." rows="7"></textarea>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-12 text-center">
+                    <input type="submit" class="btn btn-primary btn-lg" name="contact" value = "Submit">
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="push>"</div>
+    </div>
 CONTACT;
   }
 
-        function foot(){
-          print<<<FOOT
+  function foot(){
+    print<<<FOOT
   <div id="footer">
     <div class="container">
       <div class = "row">
@@ -143,32 +133,32 @@ FOOT;
   function missingInput(){
     print<<<REDO
 <div class="container" id = "display">
-                        <div class="row" style="margin-top: 5%">
-                                <div class="col-md-12">
-                                        <div class="well well-sm">
-                                        <p style="text-align:center;">Please go back and fill out all fields in the contact form.</p>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
-          <div id="push>"</div>
+  <div class="row" style="margin-top: 5%">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <p style="text-align:center;">Please go back and fill out all fields in the contact form.</p>
+      </div>
+    </div>
   </div>
+</div>
+<div id="push>"</div>
+</div>
 REDO;
   }
 
   function invalidEmail(){
     print<<<REDO
 <div class="container" id = "display">
-                        <div class="row" style="margin-top: 5%">
-                                <div class="col-md-12">
-                                        <div class="well well-sm">
-                                        <p style="text-align:center;">Sorry, please go back and enter a valid email.</p>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
-          <div id="push>"</div>
+  <div class="row" style="margin-top: 5%">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <p style="text-align:center;">Sorry, please go back and enter a valid email.</p>
+      </div>
+    </div>
   </div>
+</div>
+<div id="push>"</div>
+</div>
 REDO;
   }
 
@@ -176,18 +166,19 @@ REDO;
   function thankYou(){
     print<<<THANKS
 <div class="container" id = "display">
-                        <div class="row" style="margin-top: 5%">
-                                <div class="col-md-12">
-                                        <div class="well well-sm">
-                                        <p style="text-align:center;">Thank you for submitting your inquiry!<br/> We will get back to you as soon as we can.</p>
-                                        </div>
-                                </div>
-                        </div>
-                </div>
-          <div id="push>"</div>
+  <div class="row" style="margin-top: 5%">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <p style="text-align:center;">Thank you for submitting your inquiry!<br/> We will get back to you as soon as we can.</p>
+      </div>
+    </div>
   </div>
+</div>
+<div id="push>"</div>
+</div>
 THANKS;
   }
+	
 //The php script that handles the posted contact form data
   if (empty($_POST)){
     contactForm();
@@ -209,11 +200,23 @@ THANKS;
       foot();
     }
     else{
+			// Text file with copy of last email message
       $emailMessage = fopen("./message.txt", "w");
-      fwrite($emailMessage, "From: ".$fname." ".$lname."\n");
-      fwrite($emailMessage, "Email: ".$email."\n");
-      fwrite($emailMessage, "Message: ".$message);
-      fclose($emailMessage);
+      fwrite($emailMessage, "From: ".$fname." ".$lname."\r\n");
+      fwrite($emailMessage, "Email: ".$email."\r\n");
+      fwrite($emailMessage, "Message: ".$message."\r\n");
+      
+			
+			// sendEmail function from sendEmail.php
+			if (sendEmail($message, $email, $fname, $lname)){
+				fwrite($emailMessage, "email sent");
+			}
+			else {
+				fwrite($emailMessage, "email failed");
+			}
+			
+			fclose($emailMessage);
+			
       thankYou();
       foot();
     }
