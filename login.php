@@ -8,40 +8,46 @@ Date modified: 21 Nov 2016
 <!DOCTYPE html>
 
 <?php
+
+	require_once('custom_mysqli.php');
 	session_start();
 
 	if (isset($_POST["login"])) {
-		$host = "fall-2016.cs.utexas.edu";
-		$user = "tylrnoe";
-		$pwdDB = openssl_decrypt("Wn07mUreOuTUaGy2cBdUSg==", 'aes-128-cbc', 'acapella');
-		$dbs = "cs329e_tylrnoe";
-		$port = "3306";
-
-		$mysqli = new mysqli($host, $user, $pwdDB, $dbs);
-
-		if ($mysqli->connect_errno)
-		{
-		  die("mysqli_connect failed: " . mysqli_connect_errno());
-		}
-
-		$table = "Users";
+		$dbConnection = dbconnect();
+		
 		$username = $_POST["username"];
-		$pwd = openssl_encrypt ($_POST["passwd"], 'aes-128-cbc', 'acapella');
-                $pwd = $_POST["passwd"];
-		$result = mysqli_query($mysqli, "SELECT username, pwd from $table WHERE username='$username'");
-		$row = $result->fetch_row();
-		$chkPwd = $row[1];
-		//$chkPwd = openssl_decrypt("$row[1]", 'aes-128-cbc', 'acapella');
-                print("$pwd, $row[1], $chkPwd");
-		if ($row && $pwd == $chkPwd) {
+	  $password = $_POST["passwd"];
+		$checkBool = check_user_pass($dbConnection, $username, $password);
+		
+		if ($checkBool) {
+			print ("checks out");
 			$sname = "seshId";
 			setcookie($sname,session_id());
 			header("Location: homepage.php");
 			exit;
 		}
-		if (!$row || $pwd != $chkPwd) {
-			$_SESSION["valid"] = false;
+		elseif (! $checkBool) {
+			$_SESSION["valid"] = FALSE;
 		}
+
+		//$table = "Users";
+		//$username = $_POST["username"];
+		////$pwd = openssl_encrypt ($_POST["passwd"], 'aes-128-cbc', 'acapella');
+    //$pwd = $_POST["passwd"];
+		//$result = mysqli_query($mysqli, "SELECT username, pwd from $table WHERE username='$username'");
+		//$row = $result->fetch_row();
+		//$chkPwd = $row[1];
+		////$chkPwd = openssl_decrypt("$row[1]", 'aes-128-cbc', 'acapella');
+    ////print("$pwd, $row[1], $chkPwd");
+		//if ($row && $pwd == $chkPwd) {
+		//	$sname = "seshId";
+		//	setcookie($sname,session_id());
+		//	header("Location: homepage.php");
+		//	exit;
+		//}
+		//if (!$row || $pwd != $chkPwd) {
+		//	$_SESSION["valid"] = false;
+		//}
 	}
 
 
@@ -153,7 +159,8 @@ FOOT;
 		  	</div>
 LOGINEMPTY;
   	}
-	  if ($_SESSION["valid"] == false && !empty($_POST)) {
+	  elseif (isset($_SESSION["valid"])){ 
+			if ($_SESSION["valid"] == FALSE && !empty($_POST)) {
 	  	print<<<LOGINERROR
 			  <div id="username" class="form-group has-error has-feedback">
 			    <input type="text" class="form-control form-control-error" name="username" placeholder="Enter username">
@@ -170,6 +177,7 @@ LOGINEMPTY;
 		  	</div>
 LOGINERROR;
   	}
+	}
 	}
   
 ?>
