@@ -13,7 +13,7 @@ Date modified: 21 Nov 2016
 	session_start();
 
 	if (isset($_POST["login"])) {
-		$dbConnection = dbconnect();
+		$dbConnection = db_connect();
 		
 		$username = $_POST["username"];
 	  $password = $_POST["passwd"];
@@ -29,28 +29,8 @@ Date modified: 21 Nov 2016
 		elseif (! $checkBool) {
 			$_SESSION["valid"] = FALSE;
 		}
-
-		//$table = "Users";
-		//$username = $_POST["username"];
-		////$pwd = openssl_encrypt ($_POST["passwd"], 'aes-128-cbc', 'acapella');
-    //$pwd = $_POST["passwd"];
-		//$result = mysqli_query($mysqli, "SELECT username, pwd from $table WHERE username='$username'");
-		//$row = $result->fetch_row();
-		//$chkPwd = $row[1];
-		////$chkPwd = openssl_decrypt("$row[1]", 'aes-128-cbc', 'acapella');
-    ////print("$pwd, $row[1], $chkPwd");
-		//if ($row && $pwd == $chkPwd) {
-		//	$sname = "seshId";
-		//	setcookie($sname,session_id());
-		//	header("Location: homepage.php");
-		//	exit;
-		//}
-		//if (!$row || $pwd != $chkPwd) {
-		//	$_SESSION["valid"] = false;
-		//}
 	}
-
-
+	
 	head();
 	login();
 	foot();

@@ -1,29 +1,11 @@
 <?php
+	
+	require_once('custom_mysqli.php');
 	session_start();
-
-	// $loginfo = fopen("users.txt", "r");
-	// while (!feof($loginfo)) {
-	// 	$line = fgets($loginfo);
-	//   $split = explode(':',$line);
-	//   $realUser = $split[2];
-	//   $GLOBALS["usernames"][$realUser] = "taken";
-	// }
-	// fclose($loginfo);
 
 	$_SESSION["count"] = 0;
 
-	$host = "fall-2016.cs.utexas.edu";
-	$user = "tylrnoe";
-        $pwdDB = openssl_decrypt("Wn07mUreOuTUaGy2cBdUSg==", 'aes-128-cbc', 'acapella');
-	$dbs = "cs329e_tylrnoe";
-	$port = "3306";
-
-	$mysqli = new mysqli($host, $user, $pwdDB, $dbs);
-
-	if ($mysqli->connect_errno)
-	{
-	  die("mysqli_connect failed: " . mysqli_connect_errno());
-	}
+	$dbConnection = db_connect();
 
 	function nameValid() {
 		$name = $_POST["name"];
@@ -43,63 +25,65 @@
 
 	function emailValid($mysqli) {
 		$email = $_POST["email"];
-		$table = "Users";
-		$result = mysqli_query($mysqli, "SELECT * from $table WHERE email='$email'");
-		$row = $result->fetch_row();
 		if (empty($_POST)) {
 			$_SESSION["email"] = "empty";
+			return;
 		}
+		$table = "Users";
+		$result = mysqli_query($mysqli, "SELECT * from $table WHERE email='$email'");
+		$row = mysqli_fetch_assoc($result);
+		if (!preg_match("/^.+@.+\..+$/", $email)) {
+			$_SESSION["email"] = "error";
+		}
+		// If the email is already taken
+		elseif ($row) {
+			$_SESSION["email"] = "errorTaken";
+		}
+		// If it's not taken, validate the new email as ready for updating the table
 		else {
-			if (!preg_match("/^.+@.+\..+$/", $email)) {
-				$_SESSION["email"] = "error";
-			}
-			else if ($row) {
-				$_SESSION["email"] = "errorTaken";
-			}
-			else {
-				$_SESSION["count"]++;	
-				$_SESSION["email"] = "valid";
-			}
+			$_SESSION["count"]++;	
+			$_SESSION["email"] = "valid";
 		}
-		$result->free();
+		mysqli_free_result($result);
 	}
 
 	function userValid($mysqli) {
 		$user = $_POST["username"];
-		$table = "Users";
-		$result = mysqli_query($mysqli, "SELECT * from $table WHERE username='$user'");
-		$row = $result->fetch_row();
 		if (empty($_POST)) {
 			$_SESSION["user"] = "empty";
+			return;
 		}
-		else {
-			if (strlen($user) < 6 || strlen($user) > 20) {
-				$_SESSION["user"] = "errorLen";
-			}
-			else if ($row) {
-				$_SESSION["user"] = "errorTaken";
-			}
-			else {	
-				$_SESSION["count"]++;		
-				$_SESSION["user"] == "valid";
-			}
+		$table = "Users";
+		$result = mysqli_query($mysqli, "SELECT * from $table WHERE username='$user'");
+		$row = mysqli_fetch_assoc($result);
+		if (strlen($user) < 6 || strlen($user) > 20) {
+			$_SESSION["user"] = "errorLen";
 		}
-		$result->free();
+		// If the username is already taken
+		elseif ($row) {
+			$_SESSION["user"] = "errorTaken";
+		}
+		// If it's not taken validate the new username as ready for updating the table
+		else {	
+			$_SESSION["count"]++;		
+			$_SESSION["user"] == "valid";
+		}
+		mysqli_free_result($result);
 	}
 
+	// Double validating in conjunction with the js validation
 	function passValid() {
 		$pwd = $_POST["pwd"];
 		if (empty($_POST)) {
 			$_SESSION["pwd"] = "empty";
+			return;
 		}
-		else {
-			if (strlen($pwd) < 6 || strlen($pwd) > 20) {
-				$_SESSION["pwd"] = "error";
-			}
-			else {		
-				$_SESSION["count"]++;	
-				$_SESSION["pwd"] = "valid";
-			}
+		if (strlen($pwd) < 6 || strlen($pwd) > 20) {
+			$_SESSION["pwd"] = "errorLen";
+		}
+		else {		
+			$_SESSION["count"]++;	
+			$_SESSION["pwd"] = "valid";
 		}
 	}
 
@@ -108,49 +92,67 @@
 		$pwdTwo = $_POST["pwdTwo"];
 		if (empty($_POST)) {
 			$_SESSION["pwdTwo"] = "empty";
+			return;
 		}
-		else {
-			if (strlen($pwdTwo) == 0 || !preg_match("/$pwd/", $pwdTwo)) {
-				$_SESSION["pwdTwo"] = "error";
-			}
-			else {			
-				$_SESSION["count"]++;
-				$_SESSION["pwdTwo"] == "valid";
-			}
+		if (strlen($pwdTwo) == 0 || !preg_match("/$pwd/", $pwdTwo)) {
+			$_SESSION["pwdTwo"] = "errorNoMatch";
+		}
+		else {			
+			$_SESSION["count"]++;
+			$_SESSION["pwdTwo"] == "valid";
 		}
 	}
 
+	// Prints this html page if the user input doesn't validate
+	function noValidateHtml(){
+		print<<<ERROR
+<html>
+  <body>
+	  <p>The username or password you entered is already taken. Please click <a href="signup.php">here</a> to try again.</p>
+	</body>
+</html>
+ERROR;
+	}
+	
 	function validated ($mysqli) {
 		if ($_SESSION["count"] == 5) {
 			$table = "Users";
 			$name = $_POST["name"];
 			$email = $_POST["email"];
 			$username = $_POST["username"];
-			//$pwd = openssl_encrypt ($_POST["pwd"], 'aes-128-cbc', 'acapella');
 			$pwd = $_POST["pwd"];
 
-			$stmt = mysqli_prepare ($mysqli, "INSERT INTO $table VALUES (?, ?, ?, ?)");
-			mysqli_stmt_bind_param ($stmt, 'ssss', $name, $email, $username, $pwd);
+			$stmt = mysqli_prepare ($mysqli, "INSERT INTO $table (username, email, fullname, password) VALUES (?, ?, ?, ?)");
+			mysqli_stmt_bind_param ($stmt, 'ssss', $username, $email, $name, $pwd);
 			mysqli_stmt_execute($stmt);
 			mysqli_stmt_close($stmt);
 			setcookie("seshId", session_id());
 			header("Location: homepage.php");
 		}
+		else {
+			noValidateHtml();
+		}
 	}
+	
+	if (empty($_POST)){
+		initialHtml();
+	}
+	
+	elseif (!empty($_POST)){
+		nameValid();
+	  emailValid($dbConnection);
+    userValid($dbConnection);
+    passValid();
+    passTwoValid();
+    validated($dbConnection);
 
-	nameValid();
-	emailValid($mysqli);
-	userValid($mysqli);
-	passValid();
-	passTwoValid();
-	validated($mysqli);
-
-	$script = $_SERVER["PHP_SELF"];
-	$mysqli->close();
-?>
-
-
-<!DOCTYPE html>
+    mysqli_close($dbConnection);
+	}
+	
+	function initialHtml(){
+		$script = $_SERVER['PHP_SELF'];
+		print<<<SIGNUP
+		<!DOCTYPE html>
 <html lang="en">
 <head>
 <title>TAC Sign-Up</title>
@@ -194,7 +196,7 @@
 		  <div class="row" style="margin-top: 5%;">
 		    <div class="col-lg-12">
 		    	<div class="well well-sm">
-						<form id="signup" method="post" action="<?php $script ?>" onsubmit="return validate();" style="width: 50%; margin: 0 auto;">
+						<form id="signup" method="post" action="$script" onsubmit="return validate();" style="width: 50%; margin: 0 auto;">
 							<legend class="text-center header"> Sign-Up for TAC </legend>
 						  <div id="name" class="form-group">
 						    <input type="text" class="form-control" name="name" placeholder="Enter full name" maxlength="40">
@@ -248,3 +250,7 @@
 
 </body>
 </html>
+
+SIGNUP;
+	}
+?>

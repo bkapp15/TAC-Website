@@ -3,7 +3,7 @@
 require_once('protected/config.php');
 
 // Connects to database and returns mysqli connection object
-function dbconnect(){
+function db_connect(){
 	$connection = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
 
   if ($connection->connect_errno)
@@ -25,7 +25,7 @@ function check_user_pass($connection, $user, $pass){
 	$result = mysqli_query($connection, "SELECT username, password from ".DBTABLE." WHERE username='$user'");
 	$row = mysqli_fetch_assoc($result);
   $chkPwd = $row['password'];
-	assert ($chkPwd == $pass);
+	db_disconnect($connection, $result);
 	if ($row && $pass == $chkPwd) {
 		return TRUE;
 	}
@@ -37,28 +37,4 @@ function db_disconnect($connection, $result){
 	mysqli_free_result($result);
   mysqli_close($connection);
 }
-
-$newConnection = dbconnect();
-$newResult = mysqli_select_all_users($newConnection);
-
-while($row = mysqli_fetch_assoc($newResult)) {
-  $user = $row['username'];
-  $pass = $row['password'];
-  print("username is $user and password is $pass");
-}
-
-db_disconnect($newConnection, $newResult);
-
-////$chkPwd = openssl_decrypt("$row[1]", 'aes-128-cbc', 'acapella');
-//              print("$pwd, $row[1], $chkPwd");
-//if ($row && $pwd == $chkPwd) {
-//	$sname = "seshId";
-//	setcookie($sname,session_id());
-//	header("Location: homepage.php");
-//	exit;
-//}
-//if (!$row || $pwd != $chkPwd) {
-//	$_SESSION["valid"] = false;
-//}
-//	}
-	?>
+?>
