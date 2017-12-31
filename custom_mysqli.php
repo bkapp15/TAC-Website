@@ -1,6 +1,6 @@
 <?php
 
-require_once('protected/config.php');
+require_once('../../protected/config.php');
 
 // Connects to database and returns mysqli connection object
 function db_connect(){
